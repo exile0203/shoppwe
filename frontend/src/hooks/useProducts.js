@@ -21,9 +21,19 @@ export const useProducts = ()=>{
         }
     }
 
-    const createProduct = async()=>{
+    const createProduct = async (productData)=>{
         try{
             
+            const {productName, productPrice, productQuantity, file} = productData
+            const formData = new FormData();
+            formData.append('productName', productName);
+            formData.append('productPrice', Number(productPrice));
+            formData.append('productQuantity',Number(productQuantity));
+            formData.append('file', file);
+            const result = await axios.post(`/api/v1/products/my-products`, formData,{
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+            return result.data;
         } catch (error) {
             if (error.response) {
                 throw new Error(error.response.data.error);
@@ -57,5 +67,5 @@ export const useProducts = ()=>{
         }
     }
 
-    return {getProducts, searchProduct}
+    return {getProducts, searchProduct, createProduct}
 }

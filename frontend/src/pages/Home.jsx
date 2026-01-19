@@ -65,7 +65,8 @@ const Home = () => {
           </div>
 
           <div className="flex items-center flex-wrap gap-4">
-            <button className="flex items-center space-x-2 bg-indigo-600 text-white px-6 py-2.5 rounded-full font-bold shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95">
+            <button className="flex items-center space-x-2 bg-indigo-600 text-white px-6 py-2.5 rounded-full font-bold shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95"
+            onClick={()=>navigate('/create-product')}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
