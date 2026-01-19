@@ -1,11 +1,12 @@
 import { useCart } from "../hooks/useCart";
 import { useState, useEffect } from "react";
 import ProductCart from "../components/productCart";
+import { useAuth } from "../hooks/useAuth";
 
 const MyCart = () => {
     const [productCart, setProductCart] = useState([]);
     const { getCart } = useCart();
-
+    
     const getProducts = async () => {
         const result = await getCart();
         if (result.cart === null) {
@@ -14,9 +15,10 @@ const MyCart = () => {
             setProductCart(result.cart.items);
         }
     };
-
+     
     useEffect(() => {
         getProducts();
+  
     }, [productCart]);
 
    

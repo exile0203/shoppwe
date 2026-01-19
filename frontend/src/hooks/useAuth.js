@@ -46,6 +46,39 @@ export const useAuth = ()=>{
     }
 }
 
-    return {signIn, signUp}
+    const signOut = async()=>{
+        try{
+            const result = await axios.post(`/api/v1/auth/sign-out`)
+            return result.data
+        }catch(error){
+       if(error.response){
+          console.log("Backend error message:", error.response.data.message);
+       }
+       else if(error.request){
+         console.log("Backend error message:", error.request);
+       }
+       else{
+        console.log("error", error.message)
+       }
+    }
+    }
+
+    const getMe = async()=>{
+        try{
+            const result = await axios.get(`/api/v1/auth/me`, {withCredentials:true})
+            return result.data
+        }catch(error){
+       if(error.response){
+          console.log("Backend error message:", error.response.data.message);
+       }
+       else if(error.request){
+         console.log("Backend error message:", error.request);
+       }
+       else{
+        console.log("error", error.message)
+       }
+    }
+    }
+    return {signIn, signUp, getMe, signOut}
     
 }

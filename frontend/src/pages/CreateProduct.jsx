@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useProducts } from "../hooks/useProducts";
+import { useNavigate } from "react-router-dom";
 const CreateProduct = () => {
     const [productData , setproductData] = useState({
         productName : '',
@@ -8,16 +9,21 @@ const CreateProduct = () => {
         file : ''
     })
     const {createProduct}= useProducts();
+    const navigate = useNavigate()
 
     const handleCreate = async (e) =>{
         e.preventDefault();
         const result = await createProduct(productData)
-        console.log(result)
+        if(result.success === true){
+            alert('Product listed')
+            navigate('/home')
+        }
     }
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
-        <button className="mb-8 flex items-center text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition-colors">
+        <button className="mb-8 flex items-center text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition-colors"
+        onClick={()=>navigate('/home')}>
           ← Back to Dashboard
         </button>
 

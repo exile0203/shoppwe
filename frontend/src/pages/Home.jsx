@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
 import ProductCard from '../components/productCard';
+import { useUser } from '../context/useUserContext';
+import { useAuth } from '../hooks/useAuth';
 
 const Home = () => {
   const [productData, setproductData] = useState([]);
@@ -10,17 +12,26 @@ const Home = () => {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const { getProducts, searchProduct } = useProducts();
+  const {user} = useUser();
+  const {signOut} = useAuth();
   const navigate = useNavigate()
   const handleGetProducts = async () => {
     const result = await getProducts(page, sort);
     setproductData(result.products.products);
     setTotalPages(result.products.pagination.totalPages)
   };
-
+ 
   useEffect(() => {
     handleGetProducts();
   }, [page, sort]);
 
+  const handleSignOut = async()=>{
+    const result = await signOut();
+    if(result.sucess === true){
+      alert('User successfully logged out')
+      navigate('/')
+    }
+  }
   const handleSearch = async()=>{
     if(!query.trim()){
       handleGetProducts();
@@ -30,8 +41,6 @@ const Home = () => {
     if(result.result.results.length >= 1){
       setproductData(result.result.results)
     }
-   
-   
   }
  return (
     <div className="bg-gray-50 min-h-screen">
@@ -47,7 +56,7 @@ const Home = () => {
                 Explore our curated collection of premium products.
               </p>
             </div>
-
+              <button onClick={handleSignOut}>Sign Out</button>
             <div className="relative max-w-md w-full flex items-center">
               <input 
                 type="text" 
@@ -65,13 +74,13 @@ const Home = () => {
           </div>
 
           <div className="flex items-center flex-wrap gap-4">
-            <button className="flex items-center space-x-2 bg-indigo-600 text-white px-6 py-2.5 rounded-full font-bold shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95"
+            {user?.role === 'seller' && (<button className="flex items-center space-x-2 bg-indigo-600 text-white px-6 py-2.5 rounded-full font-bold shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95"
             onClick={()=>navigate('/create-product')}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
               <span>Create Product</span>
-            </button>
+            </button>)}
 
             <button className="relative flex items-center space-x-2 bg-white border border-gray-200 px-6 py-2.5 rounded-full shadow-sm hover:shadow-md hover:border-indigo-300 transition-all group">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">

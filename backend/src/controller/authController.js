@@ -75,3 +75,13 @@ export const signOutUser = async(req, res)=>{
     });
   }
 }
+export const getMe = async(req, res)=>{
+    try{
+        res.status(200).json({
+            sucess:true,
+            user:req.user
+        })
+    }catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+}

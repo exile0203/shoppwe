@@ -9,9 +9,12 @@ import Login from './auth/login.jsx'
 import Signup from './auth/signup.jsx'
 import MyCart from './pages/MyCart.jsx'
 import CreateProduct from './pages/CreateProduct.jsx'
+
+import { AuthProvider } from './context/useUserContext.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
+    <AuthProvider>
     <Routes>
       <Route path="/" element={<App/>}/>
       <Route path="/home" element={<Home/>}/>
@@ -20,6 +23,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/mycart" element={<MyCart/>}/>
       <Route path="/create-product" element={<CreateProduct/>}/>
     </Routes>
+    </AuthProvider>
     </BrowserRouter>
    
   </StrictMode>,

@@ -12,7 +12,7 @@ const App = () => {
           <div className="flex justify-between h-16 items-center">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-indigo-600 tracking-tight">MGR STORE</span>
+              <span className="text-2xl font-bold text-indigo-600 tracking-tight">SHOP PWE</span>
             </div>
 
             {/* Desktop Menu */}
@@ -59,7 +59,7 @@ const App = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-12 md:mb-0">
             <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
-              Upgrade Your Style with <span className="text-indigo-600">MGR Store</span>
+              Upgrade Your Style with <span className="text-indigo-600">SHOP PWE</span>
             </h1>
             <p className="text-lg text-gray-600 mb-8 max-w-lg">
               Discover the latest trends in tech and fashion. Premium quality products delivered right to your doorstep.
