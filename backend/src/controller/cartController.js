@@ -50,9 +50,11 @@ export const editCart = async (req, res)=>{
             newQuantity:quantity
         })
 
+        const sum  = updatedProduct.product.productPrice * updatedProduct.quantity
         return res.status(201).json({
             sucess:true,
-            updatedProduct
+            updatedProduct,
+            sum
         })
     }catch(err){
         return res.status(400).json({

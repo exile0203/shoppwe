@@ -1,25 +1,49 @@
 import { useCart } from "../hooks/useCart";
 import { useState, useEffect } from "react";
 import ProductCart from "../components/productCart";
-import { useAuth } from "../hooks/useAuth";
 
 const MyCart = () => {
-    const [productCart, setProductCart] = useState([]);
-    const { getCart } = useCart();
-    
-    const getProducts = async () => {
-        const result = await getCart();
-        if (result.cart === null) {
-            alert("You currently have no products in your cart");
-        } else {
-            setProductCart(result.cart.items);
-        }
-    };
-     
-    useEffect(() => {
-        getProducts();
+  const [productCart, setProductCart] = useState([]);
+  const [total, setTotal] = useState(0);
+  const { getCart } = useCart();
+
+  const getProducts = async () => {
+    const result = await getCart();
+    if (result.cart === null) {
+      alert("You currently have no products in your cart");
+    } else {
+      
+      const itemsWithCheck = result.cart.items.map((item) => ({
+        ...item,
+        isChecked: false,
+      }));
+      setProductCart(itemsWithCheck);
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   
-    }, [productCart]);
+  useEffect(() => {
+    const newTotal = productCart
+      .filter((item) => item.isChecked)
+      .reduce((acc, item) => acc + item.quantity * item.product.productPrice, 0);
+    setTotal(newTotal);
+  }, [productCart]);
+
+ 
+  const handleProductChange = (productId, isChecked, quantity) => {
+    setProductCart((prev) =>
+      prev.map((item) =>
+        item._id === productId
+          ? { ...item, isChecked: isChecked ?? item.isChecked, quantity: quantity ?? item.quantity }
+          : item
+      )
+    );
+  };
+
 
    
     return (
@@ -33,7 +57,9 @@ const MyCart = () => {
                             {productCart.length > 0 ? (
                                 <div className="divide-y divide-gray-200">
                                     {productCart.map((product) => (
-                                        <ProductCart key={product._id} product={product} />
+                                        <ProductCart key={product._id} product={product} 
+                                        onProductChange={handleProductChange}
+                                         />
                                     ))}
                                 </div>
                             ) : (
@@ -54,20 +80,13 @@ const MyCart = () => {
                             <h2 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h2>
                             <div className="space-y-4">
                                 <div className="flex justify-between text-gray-600">
-                                    <span>Subtotal</span>
-                                    <span>$0.00</span>
-                                </div>
-                                <div className="flex justify-between text-gray-600">
                                     <span>Shipping</span>
-                                    <span className="text-green-600 font-medium">Free</span>
-                                </div>
-                                <div className="flex justify-between text-gray-600">
-                                    <span>Taxes</span>
-                                    <span>$0.00</span>
+                                    <span className="text-green-600 font-medium">₱53</span>
                                 </div>
                                 <div className="border-t border-gray-100 pt-4 flex justify-between text-xl font-bold text-gray-900">
                                     <span>Total</span>
-                                    <span>$0.00</span>
+                                    <span>₱{total}</span>
+                                    <span></span>
                                 </div>
                             </div>
                             <button className="w-full mt-8 bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">

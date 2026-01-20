@@ -58,18 +58,37 @@ export const editCartService = async ({ productId, userId, newQuantity }) => {
       $set: { "items.$.quantity": newQuantity }
     },
     { new: true }
-  );
+  ).populate("items.product", "productName productPrice productPicture ownerId ownerName");
+   
 
   if (!cart) {
     throw new Error("Product not found in cart");
   }
 
   const updatedItem = cart.items.find(
-    item => item.product.toString() === productId
+    item => item.product._id.toString() === productId
   );
 
   return updatedItem; 
 };
+
+  export const getProductbyIdService = async({userId, productId})=>{
+
+    const cart = await Cart.findOne({
+      user: userId
+    })
+    .populate("items.product", "productName productPrice productPicture ownerId ownerName");
+    
+    
+
+    const item = cart.items.find(
+      item => item.product._id.toString() === productId
+    )
+    if(!item){
+      throw new Error('Product not found')
+    }
+    return item;
+  }
 
 
 

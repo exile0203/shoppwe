@@ -56,6 +56,24 @@ export const useCart = ()=>{
             }
         }
     }
+    
+    const getProductbyId = async(id)=>{
+        try{
+            if(!id){
+                throw new Error('ID MISSING')
+            }
+            const result = await axios.get(`/api/v1/cart/${id}`)
+            return result.data
+        }catch (error) {
+            if (error.response) {
+                throw new Error(error.response.data.error);
+            } else if (error.request) {
+                throw new Error("No response from server");
+            } else {
+                throw new Error(error.message);
+            }
+        }
+    }
 
     const deleteProduct = async(id)=>{
         try{
@@ -79,5 +97,5 @@ export const useCart = ()=>{
             }
         }
     }
-    return {getCart, addToCart, editProduct, deleteProduct}
+    return {getCart, addToCart, editProduct, deleteProduct, getProductbyId}
 }
