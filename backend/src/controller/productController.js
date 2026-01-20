@@ -1,3 +1,4 @@
+import { getProductbyIdService } from "../services/cartService.js";
 import { createProductService, editProductService, deleteProductService, getAllProductsService, searchProductService } from "../services/productService.js";
 
 export const createProduct = async (req, res) => {
@@ -51,6 +52,37 @@ export const editProduct = async(req, res)=>{
       success: false,
       Error: err.message
     });
+    }
+}
+
+export const getProductbyId = async(req, res)=>{
+    try{
+      const userId = req.user._id
+      const {id} = req.params
+      if(!userId || !id){
+        return res.status(401).json({
+          success:false,
+          Error:"Missing necessary id"
+        })
+      }
+      const result = await getProductbyIdService({
+        userId: userId,
+        productId: id
+      })
+
+      const sum  = result.product.productPrice * result.quantity
+      
+      return res.status(200).json({
+        success:true,
+        result,
+        sum
+      })
+      
+    } catch (err) {
+      return res.status(400).json({
+        success: false,
+        Error: err.message
+      });
     }
 }
 
