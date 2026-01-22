@@ -5,8 +5,17 @@ const ProductCard = ({product}) => {
    const {addToCart} = useCart(); 
 
    const handleAddToCart = async()=>{
+    try{
     const result = await addToCart(product._id)
-    console.log(result)
+    if(result){
+    if(result.sucess === true){
+      alert('Product added to your cart')
+    }
+    }
+    }catch(error){
+     alert(error.message); 
+    console.log(error.message);
+    }
    }
 
   const capitalizeWords = (text = "") =>

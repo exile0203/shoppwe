@@ -1,3 +1,4 @@
+import redisClient from '../config/redisConfig.js';
 import Cart from '../models/cartModel.js'
 
 export const addToCartService = async(id, userId, quantity)=>{
@@ -37,10 +38,16 @@ export const getCartService = async(id)=>{
     if(!id){
         throw new Error("ID MISSING")
     }
+     const cachedKey = `cart/${id}`
+    const cachedCart = await redisClient.get(cachedKey)
+    if(cachedCart){
+      return JSON.parse(cachedCart)
+    }
+
     const cart = await Cart.findOne({ user: id })  
         .select("-createdAt -updatedAt")
     .populate("items.product", "productName productPrice productPicture ownerId ownerName");
-    
+    await redisClient.setEx(cachedKey, 3600, JSON.stringify(cart))
     return cart;
 }
 

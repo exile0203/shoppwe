@@ -21,11 +21,22 @@ const Signup = () => {
     
    const handleLogin = async (e) => {
      e.preventDefault();
+      try{
+        const result = await signUp(formData)
+        if(result){
+        if(result.sucess === true){
+        alert('Registration Successful')
+        navigate('/login')
+      }
+      }
+      }catch(error){
+        alert(error.message); 
+        console.log(error.message);
+     }
+     }
+    
 
-     const result = await signUp(formData)
-     console.log(result)
-
-    }
+    
   
 
   return (
