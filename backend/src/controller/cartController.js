@@ -1,5 +1,5 @@
 import { addToCartService, editCartService, getCartService, deleteProductCartService } from "../services/cartService.js";
-
+import redisClient from "../config/redisConfig.js";
 export const addToCart = async(req, res)=>{
     try{
         const {id} = req.params

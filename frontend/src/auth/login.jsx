@@ -9,15 +9,22 @@ const Login = () => {
   const {signIn} = useAuth()
   const handleLogin = async (e)=>{
     e.preventDefault();
+    try{
     const formData = {username, password}
     const result = await signIn(formData)
+    if(result){
     if(result.sucess === true){
-      alert("Login Sucessful")
+      alert('Login Successful')
       navigate('/home')
     }
-    else{
-      alert("Invalid credentials")
     }
+    }catch(error){
+     alert(error.message); 
+    console.log(error.message);
+    }
+    
+   
+    
   }
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

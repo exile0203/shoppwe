@@ -1,5 +1,6 @@
 import { registerUserService, signInUserService } from "../services/authService.js";
-
+import { loginRateLimiter, resetLoginAttempts } from "../middleware/rateLimiterMiddleware.js";
+import redisClient from "../config/redisConfig.js";
 export const registerUser = async(req, res)=>{
     try{
         const {name, username, password, role} = req.body
@@ -25,7 +26,11 @@ export const registerUser = async(req, res)=>{
 export const signInUser = async (req, res)=>{
     try{
         const {username, password} = req.body
-        
+
+        const limiter = await loginRateLimiter(username);
+        if(!limiter.allowed){
+          return res.status(429).json({message:limiter.message})
+        }
         const user = await signInUserService(username, password)
         const token = user.token
 
@@ -40,7 +45,8 @@ export const signInUser = async (req, res)=>{
         60 *
         1000,
        });
-
+       
+             await resetLoginAttempts(username)
         return res.status(200).json({
             sucess:true,
             user:{
@@ -49,6 +55,7 @@ export const signInUser = async (req, res)=>{
                 username:user.user.username,
                 role:user.user.role
             }})
+
     }catch (err) {
     console.error(err);
     res.status(400).json({
@@ -77,9 +84,22 @@ export const signOutUser = async(req, res)=>{
 }
 export const getMe = async(req, res)=>{
     try{
-        res.status(200).json({
-            sucess:true,
-            user:req.user
+        const userId = req.user._id
+        const cachedKey = `user/${userId}`
+        const cachedUser = await redisClient.get(cachedKey)
+        if(cachedUser){
+          return res.status(200).json({
+            success:true,
+            user : JSON.parse(cachedUser),
+            source:"cached"
+          })
+        }
+        await redisClient.setEx(cachedKey, 3600, JSON.stringify(req?.user))
+
+        return res.status(200).json({
+          success:true,
+          user : req.user,
+          source:"db"
         })
     }catch (err) {
     res.status(500).json({ success: false, message: err.message });

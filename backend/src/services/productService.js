@@ -1,5 +1,8 @@
 import Product from '../models/productModel.js'
 import { uploadproductProfile } from '../utils/productPFP.js';
+import cloudinary from "../config/cloudinaryConfig.js";
+import redisClient from '../config/redisConfig.js';
+
 export const createProductService = async(productData)=>{
     const {ownerId, productName, productQuantity, fileBuffer, ownerName,productPrice,} = productData;
 
@@ -30,7 +33,6 @@ export const createProductService = async(productData)=>{
 
 }
 
-import cloudinary from "../config/cloudinaryConfig.js";
 
 export const editProductService = async (id, productData) => {
   const {
@@ -87,30 +89,45 @@ export const deleteProductService = async(id) =>{
     const result = await Product.findByIdAndDelete(id)
     return result;
 }
+export const getAllProductsService = async (page = 1, limit = 6, sortQuery = { productPrice: -1 }) => {
+  const pageNumber = parseInt(page);
+  const limitNumber = parseInt(limit);
+  const skip = (pageNumber - 1) * limitNumber;
 
-export const getAllProductsService = async(page=1, limit=6, sortQuery = {productPrice: - 1})=>{
-    
-    const pageNumber = parseInt(page)
-    const limitNumber = parseInt(limit)
-    const skip = (pageNumber- 1) * limitNumber
-    const products = await Product.find()
+
+  const cacheKey = `products_page${pageNumber}_limit${limitNumber}_sort${JSON.stringify(sortQuery)}`;
+
+
+  const cachedProducts = await redisClient.get(cacheKey);
+  if (cachedProducts) {
+    console.log("Cache hit");
+    return JSON.parse(cachedProducts); 
+  }
+
+  
+  const products = await Product.find()
     .select("-createdAt -updatedAt")
     .sort(sortQuery)
     .skip(skip)
-    .limit(limitNumber)
+    .limit(limitNumber);
 
-    const totalProducts = await Product.countDocuments();
+  const totalProducts = await Product.countDocuments();
 
-    return{
-        products,
-        pagination:{
-            page:pageNumber,
-            limit: limitNumber,
-            totalProducts,
-            totalPages: Math.ceil(totalProducts/ limitNumber)
-        }
-    }
-}
+  const result = {
+    products,
+    pagination: {
+      page: pageNumber,
+      limit: limitNumber,
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / limitNumber),
+    },
+  };
+
+
+  await redisClient.setEx(cacheKey, 3600, JSON.stringify(result));
+  console.log("Cached in Redis");
+  return result;
+};
 
 export const searchProductService = async({query, page, limit})=>{
       if(!query){

@@ -12,7 +12,7 @@ const Home = () => {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const { getProducts, searchProduct } = useProducts();
-  const {user} = useUser();
+  const {user, loading} = useUser();
   const {signOut} = useAuth();
   const navigate = useNavigate()
   const handleGetProducts = async () => {
@@ -42,6 +42,9 @@ const Home = () => {
       setproductData(result.result.results)
     }
   }
+
+  if (loading) return <div>Loading...</div>; 
+  if (!user) return <div>You must log in</div>; 
  return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

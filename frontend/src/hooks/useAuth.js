@@ -13,16 +13,13 @@ export const useAuth = ()=>{
             }
             return response.data
         }catch(error){
-       if(error.response){
-          console.log("Backend error message:", error.response.data.message);
-       }
-       else if(error.request){
-         console.log("Backend error message:", error.request);
-       }
-       else{
-        console.log("error", error.message)
-       }
-    }
+            if(error.response){
+             throw new Error(error.response.data.message || "Backend error");
+         } else {
+            throw new Error(error.message || "Unknown error");
+         }
+}
+
     }
 
     const signUp = async(formData) =>{
@@ -34,16 +31,12 @@ export const useAuth = ()=>{
            
             return result.data
         }catch(error){
-       if(error.response){
-          console.log("Backend error message:", error.response.data.message);
-       }
-       else if(error.request){
-         console.log("Backend error message:", error.request);
-       }
-       else{
-        console.log("error", error.message)
-       }
-    }
+            if(error.response){
+             throw new Error(error.response.data.message || "Backend error");
+         } else {
+            throw new Error(error.message || "Unknown error");
+         }
+}
 }
 
     const signOut = async()=>{
