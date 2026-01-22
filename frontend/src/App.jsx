@@ -82,7 +82,7 @@ const App = () => {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <div className="p-6 bg-white rounded-xl shadow-sm">
-            <div className="text-3xl mb-4">🚚</div>
+            <div className="text-3xl mb-4"></div>
             <h3 className="font-bold text-xl mb-2">Free Shipping</h3>
             <p className="text-gray-500 text-sm">On all orders over $50. No hidden fees.</p>
           </div>
