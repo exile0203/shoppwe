@@ -6,16 +6,15 @@ const App = () => {
  
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-      {/* --- Navigation Bar --- */}
       <nav className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            {/* Logo */}
+            
             <div className="flex-shrink-0 flex items-center">
               <span className="text-2xl font-bold text-indigo-600 tracking-tight">SHOP PWE</span>
             </div>
 
-            {/* Desktop Menu */}
+            
             <div className="hidden md:flex space-x-8 items-center">
               <a href="#" className="text-gray-600 hover:text-indigo-600 transition">Shop</a>
               <a href="#" className="text-gray-600 hover:text-indigo-600 transition">Categories</a>
@@ -32,7 +31,7 @@ const App = () => {
               </div>
             </div>
 
-            {/* Mobile Menu Button */}
+            
             <div className="md:hidden flex items-center">
               <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-600">
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,7 +42,7 @@ const App = () => {
           </div>
         </div>
 
-        {/* Mobile Dropdown */}
+        
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-100 px-4 pt-2 pb-6 space-y-2">
             <a href="#" className="block py-2 text-gray-600">Shop</a>
@@ -54,7 +53,7 @@ const App = () => {
         )}
       </nav>
 
-      {/* --- Hero Section --- */}
+      
       <header className="relative bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-12 md:mb-0">
@@ -73,13 +72,13 @@ const App = () => {
             </div>
           </div>
           <div className="md:w-1/2 bg-indigo-100 rounded-3xl h-64 md:h-96 w-full flex items-center justify-center">
-             {/* Placeholder for an image */}
+             
              <span className="text-indigo-400 font-medium italic text-xl">[ Featured Product Image ]</span>
           </div>
         </div>
       </header>
 
-      {/* --- Feature Sections --- */}
+
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <div className="p-6 bg-white rounded-xl shadow-sm">

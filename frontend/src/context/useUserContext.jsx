@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       console.error(err);
       setUser(null);
     } finally {
-      setLoading(false); // ✅ finished checking
+      setLoading(false); 
     }
   };
 
